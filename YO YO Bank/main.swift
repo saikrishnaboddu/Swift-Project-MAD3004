@@ -2,15 +2,15 @@
 import Foundation
 
 var userArray=[User]()
-var userObj=User(SIN: "", name: "", phoneNumber: 0, email: "", address: "", password: "", balance: 0.0)
+var userObj=User(SIN: "", name: "", phoneNumber: 0, email: "", address: "", password: "", balance: 0.0,accountType: "")
 var tranxArray=[Transaction]()
 var tranxObj=Transaction(tranxId: "", tranxType: "", tranxDate: Date(), tranxAmount: 0.0, userName: "")
 
 var loggedInUser=""
-userArray.append(User(SIN: "9989", name: "John Wick", phoneNumber: 9999999, email: "John@wick.com", address: "Continental", password: "9989", balance: 100000))
-userArray.append(User(SIN: "766920", name: "Walter White", phoneNumber: 88888, email: "Walter@white.com", address: "ABQ", password: "766920", balance: 50000))
-userArray.append(User(SIN: "8801", name: "Jesse PinkMan", phoneNumber: 777777, email: "Pinkman@jesse.com", address: "Alaska", password: "8801", balance: 700000))
-userArray.append(User(SIN: "89028", name: "Gus Fring", phoneNumber: 66666, email: "Fring@gus.com", address: "Hermanos", password: "89028", balance: 10))
+userArray.append(User(SIN: "9989", name: "John Wick", phoneNumber: 9999999, email: "John@wick.com", address: "Continental", password: "9989", balance: 100000,accountType: "Checking"))
+userArray.append(User(SIN: "766920", name: "Walter White", phoneNumber: 88888, email: "Walter@white.com", address: "ABQ", password: "766920", balance: 50000,accountType: "Checking"))
+userArray.append(User(SIN: "8801", name: "Jesse PinkMan", phoneNumber: 777777, email: "Pinkman@jesse.com", address: "Alaska", password: "8801", balance: 700000,accountType: "Savings"))
+userArray.append(User(SIN: "89028", name: "Gus Fring", phoneNumber: 66666, email: "Fring@gus.com", address: "Hermanos", password: "89028", balance: 10,accountType: "Savings"))
 
 print("-------Welcome to YO YO Bank--------")
 
@@ -100,10 +100,26 @@ func AdminNewUser()
     let addr = readLine()!
     print("Please enter a password for the User")
     let pass=readLine()!
+    var account = ""
+    while true {
+    print("Please select the type of Account :\n1. Checking\n2. Savings")
+    let accTypeChoice=Int(readLine()!)!
+    if accTypeChoice == 1{
+        account = "Checking"
+        break
+    }
+    else if accTypeChoice == 2{
+        account = "Savings"
+        break
+    }
+    else{
+        print("Please choose a valid type")
+    }
+    }
     print("Please enter inital balance for the User")
     let initialBal=Double(readLine()!)!
     
-    userArray.append(User(SIN: sin, name: name, phoneNumber: phNo, email: email, address: addr, password: pass, balance: initialBal))
+    userArray.append(User(SIN: sin, name: name, phoneNumber: phNo, email: email, address: addr, password: pass, balance: initialBal ,accountType:account ))
     
     print("\nUser : \(name) successfully added")
 }
@@ -129,7 +145,7 @@ func AdminDeleteUser(){
 func userLoginSuccessful(){
     var userLoop=true
     while userLoop {
-    print("\nPlease select an option :\n1. Deposit Money\n2. Withdraw Money\n3. Transfer Money\n4. Pay Utility\n5. Display Balance\n6. Display Transactions\n7. Logout")
+    print("\nPlease select an option :\n1. Deposit Money\n2. Withdraw Money\n3. Transfer Money\n4. Pay Utility\n5. Display Balance\n6. Display Transactions\n7. Edit my details\n8. Logout")
         let userChoice=Int(readLine()!)!
     switch userChoice {
     case 1:
@@ -166,7 +182,11 @@ func userLoginSuccessful(){
         break
     case 6:
         tranxObj.displayTranx(tranx: tranxArray, userName: loggedInUser)
+        break
     case 7:
+        userObj.editUserDetails(users: userArray, username: loggedInUser)
+        break
+    case 8:
         userLoop=false
         ShowMenu()
         break
